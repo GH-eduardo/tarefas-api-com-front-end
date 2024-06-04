@@ -1,7 +1,3 @@
-const { response } = require("express")
-const { stringify } = require("querystring")
-
-const taskKey = '@tasks'
 
 function mudarMenu(opcao) {
 
@@ -22,6 +18,7 @@ function mudarMenu(opcao) {
             document.querySelector('#input2').style.display = 'none'
             break;
         case '6':
+            document.querySelector('#divDoBotão').style.display = 'grid'
             document.querySelector('#taskList').style.display = 'none'
             document.querySelector('.container').style.display = 'none'
             document.querySelector('#input').placeholder = 'Data de início (aaaa-mm-dd)';
@@ -30,29 +27,33 @@ function mudarMenu(opcao) {
             document.querySelector('#input2').style.display = 'block'
             break;
         case '9':
+            document.querySelector('#divDoBotão').style.display = 'grid'
             document.querySelector('#taskList').style.display = 'none'
-            document.querySelector('#input').placeholder = 'Nome da Pessoa (pode ser incompleto)';
+            document.querySelector('#input').placeholder = 'Nome da Pessoa (completo)';
             document.querySelector('#input').style.display = 'block'
             document.querySelector('.container').style.display = 'none'
             document.querySelector('#input2').style.display = 'none'
             break;
         case '10':
+            document.querySelector('#divDoBotão').style.display = 'grid'
             document.querySelector('#taskList').style.display = 'none'
-            document.querySelector('#input').placeholder = 'Nome da Pessoa (pode ser incompleto)';
+            document.querySelector('#input').placeholder = 'Nome da Pessoa (completo)';
             document.querySelector('#input').style.display = 'block'
             document.querySelector('.container').style.display = 'none'
             document.querySelector('#input2').style.display = 'none'
             break;
         case '11':
+            document.querySelector('#divDoBotão').style.display = 'grid'
             document.querySelector('#taskList').style.display = 'none'
-            document.querySelector('#input').placeholder = 'Nome da Pessoa (pode ser incompleto)';
+            document.querySelector('#input').placeholder = 'Nome da Pessoa (completo)';
             document.querySelector('#input').style.display = 'block'
             document.querySelector('.container').style.display = 'none'
             document.querySelector('#input2').style.display = 'none'
             break;
         case '12':
+            document.querySelector('#divDoBotão').style.display = 'grid'
             document.querySelector('#taskList').style.display = 'none'
-            document.querySelector('#input').placeholder = 'Nome da Pessoa (pode ser incompleto)';
+            document.querySelector('#input').placeholder = 'Nome da Pessoa (completo)';
             document.querySelector('#input').style.display = 'block'
             document.querySelector('.container').style.display = 'none'
             document.querySelector('#input2').style.display = 'none'
@@ -68,6 +69,7 @@ function mudarMenu(opcao) {
 }
 
 function menuOperacao() {
+
     let opcao = document.querySelector('#opcoes').value
     let input = document.querySelector('#input').value
     let input2 = document.querySelector('#input2').value
@@ -107,7 +109,6 @@ function menuOperacao() {
             mostrarTarefaMaisAntigaDeUmaPessoa(input)
             break;
     }
-
 }
 
 // Função para adicionar tarefa
@@ -122,7 +123,9 @@ function addTask(event) {
     const taskStatus = formData.get('status')
     const taskAuthor = formData.get('author')
 
-    let data = '{ "title":"' + taskTitle + '", "description":"' + taskDescription + '", "status":"' + taskStatus + '", "author":"' + taskAuthor + '" }'
+    let date = new Date()
+    let dataAtual = date.toISOString().slice(0, 19).replace("T", " ");
+    let data = '{ "title":"' + taskTitle + '", "description":"' + taskDescription + '", "status":"' + taskStatus + '", "author":"' + taskAuthor + '", "creation_date":"' + dataAtual + '" }'
 
     console.log(data)
 
@@ -154,26 +157,21 @@ async function carregarTodasTarefas() {
 }
 
 async function carregarTarefas(tasks) {
-    // event.preventDefault() // Evita o recarregamento da página
 
-    // const response = await fetch('/tasks', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    // });
-    // const tasks = await response.json();
+    if (Array.isArray(tasks) == false) {
+        tasks = [tasks]
+    }
 
     const taskList = document.querySelector('#taskList')
     taskList.innerHTML = tasks
-        .map((task) => `<li><h2>Título: ${task.title}</h2><p>Descrição: ${task.description}</p>
-        <p>Status: ${task.status}</p><p>Autor: ${task.author}</p>
-        <p>Data de criação: ${task.creation_date}</p> <p>Data de conclusão: ${task.conclusion_date}</p>
-        <button class = "removeButton" title = "Remover tarefa">️<img src="./delete-icon.png"></button>
-        <button class = "editButton" title = "Editar tarefa">✏️</button>
-        <button class = "completeButton" title = "Marcar como concluída">✅</button></li>`)
-        .join('')
-    addDialogToEditButton(0) // começa a partir do primeiro botão
+    .map((task) => `<li id="${task._id}"><h2>Título: ${task.title}</h2><p>Descrição: ${task.description}</p>
+    <p>Status: ${task.status}</p><p>Autor: ${task.author}</p>
+    <p>Data de criação: ${task.creation_date}</p> <p>Data de conclusão: ${task.conclusion_date}</p>
+    <button class = "editButton" title = "Editar tarefa" onclick="dialog('${task._id}','${task.title}','${task.description}')">✏️</button>
+    <button class = "removeButton" title = "Remover tarefa" onclick="remove('${task._id}')">️<img src="./delete-icon.png"></button>
+    ${task.status !== 'concluída' ? '<button class = "completeButton" title = "Marcar como concluída" onclick="concluir(\'' + task._id + '\')">✅</button>' : ''}
+    </li>`)
+    .join('')
 
     document.querySelector('#taskList').style.display = 'block'
 }
@@ -189,7 +187,6 @@ async function pesquisarPorTitulo(title) {
     });
     const tasks = await response.json();
     carregarTarefas(tasks)
-
 }
 
 async function listarTarefasConcluidas() {
@@ -221,7 +218,7 @@ async function listarTarefasPendentes() {
 async function listarTarefasConcluidasNoIntervalo(dataInicio, dataFim) {
     event.preventDefault() // Evita o recarregamento da página
 
-    const response = await fetch(`/tasks/due-in-period?startDate=${dataInicio}&endDate=${dataFim}`, {
+    const response = await fetch(`/tasks/created-in-period?startDate=${dataInicio}&endDate=${dataFim}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -240,10 +237,8 @@ async function mostrarMediaDeConclusaoDeTarefas() {
             'Content-Type': 'application/json',
         },
     });
-    const tasks = await response.json();
-    let p = document.createElement('p')
-    p.innerText = tasks + '%'
-    document.querySelector('main').appendChild(p)
+    const resposta = await response.json();
+    alert(resposta)
 }
 
 async function mostrarTarefaComDescricaoMaisLonga() {
@@ -255,32 +250,81 @@ async function mostrarTarefaComDescricaoMaisLonga() {
             'Content-Type': 'application/json',
         },
     });
-    const task = await response.json();
-
+    const task = await response.json()
     console.log(task)
-
-    const taskList = document.querySelector('#taskList')
-    taskList.innerHTML = 
-        `<li><h2>Título: ${task.title}</h2><p>Descrição: ${task.description}</p>
-        <p>Status: ${task.status}</p><p>Autor: ${task.author}</p>
-        <p>Data de criação: ${task.creation_date}</p> <p>Data de conclusão: ${task.conclusion_date}</p>
-        <button class = "removeButton" title = "Remover tarefa">️<img src="./delete-icon.png"></button>
-        <button class = "editButton" title = "Editar tarefa">✏️</button>
-        <button class = "completeButton" title = "Marcar como concluída">✅</button></li>`
-    addDialogToEditButton(0) // começa a partir do primeiro botão
-
-    document.querySelector('#taskList').style.display = 'block'
+    carregarTarefas(task)
 }
 
-function addDialogToEditButton(start) {
-    let editButtons = document.querySelectorAll('.editButton');
+async function mostrarTodasTarefasDeUmaPessoa(author) {
+    event.preventDefault() // Evita o recarregamento da página
 
-    for (let index = start; index < editButtons.length; index++) {
-        editButtons[index].addEventListener('click', () => dialog(index));
-    }
+    const response = await fetch(`/tasks/all/${author}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const tasks = await response.json();
+    console.log(tasks)
+    carregarTarefas(tasks)
 }
 
-function dialog(taskId) {
+async function contarTarefasDeUmaPessoa(author) {
+    event.preventDefault() // Evita o recarregamento da página
+
+    const response = await fetch(`/tasks/user/${author}/count`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const resposta = await response.json();
+    alert(resposta)
+}
+
+async function mostrarTarefaMaisRecenteDeUmaPessoa(author) {
+    event.preventDefault() // Evita o recarregamento da página
+
+    const response = await fetch(`/tasks/user/${author}/most-recent`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const task = await response.json()
+    carregarTarefas(task)
+}
+
+async function mostrarTarefaMaisAntigaDeUmaPessoa(author) {
+    event.preventDefault() // Evita o recarregamento da página
+
+    const response = await fetch(`/tasks/user/${author}/oldest`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const task = await response.json()
+    carregarTarefas(task)
+}
+
+async function edit(id, title, description) {
+
+    let data = '{ "title":"' + title + '", "description":"' + description + '" }'
+
+    const response = await fetch(`/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data
+    });
+    const tasks = await response.json();
+    document.getElementById(id).remove()
+    carregarTarefas(tasks)
+}
+
+function dialog(id, title, description) {
 
     let dialog = document.createElement('dialog')
     let cancelButton = document.createElement('button')
@@ -293,22 +337,39 @@ function dialog(taskId) {
     let saveButton = document.createElement('button')
     saveButton.innerText = 'Salvar'
 
+    dialog.innerHTML = `
+        <form id="editTaskForm">
+            <label for="title">Novo Título: </label>
+            <input type="text" name="title" value="${title}" id="newTitle" style="margin-bottom: 15px;"required>
+            <label for="description">Nova Descrição: </label>
+            <textarea name="description" id="newDescription" required>${description}</textarea>
+        </form>
+    `
+    dialog.style = 'display: flex; flex-direction: column; align-items: center; gap: 10px;'
+
+    saveButton.addEventListener("click", function () {
+        let newTitle = document.querySelector('#newTitle').value
+        let newDescription = document.querySelector('#newDescription').value
+
+        console.log(newTitle, newDescription, title, description)
+
+        if (newTitle != title || newDescription != description) {
+            edit(id, newTitle, newDescription)
+            dialog.close();
+            document.querySelector('main').removeChild(dialog)
+            alert('Tarefa editada com sucesso!')
+        }
+        else {
+            dialog.close();
+            document.querySelector('main').removeChild(dialog)
+            alert('Não houve alterações')
+        }
+    });
+
     let div = document.createElement('div')
     div.style = 'margin-top: 10px; display: flex; gap: 10px;'
     div.appendChild(cancelButton)
     div.appendChild(saveButton)
-
-    const tasks = JSON.parse(localStorage.getItem(taskKey)) || []
-
-    dialog.innerHTML = `
-        <form id="editTaskForm">
-            <label for="title"></label>
-            <input type="text" name="title" value="${tasks[taskId].title}" required>
-            <label for="description"></label>
-            <textarea name="description" required>${tasks[taskId].description}</textarea>
-        </form>
-    `
-    dialog.style = 'display: flex; flex-direction: column; align-items: center;'
 
     dialog.appendChild(div)
     dialog.open = false
@@ -317,6 +378,33 @@ function dialog(taskId) {
     dialog.showModal()
 }
 
-function addRemoveButton(start) {
+async function remove(id) {
+    console.log(id)
+    const response = await fetch(`/tasks/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const tasks = await response.json();
+    alert(tasks)
+    document.getElementById(id).remove()
+}
 
+async function concluir(id) {
+    let date = new Date()
+    let dataAtual = date.toISOString().slice(0, 19).replace("T", " ");
+    let data = '{ ' + '"status":"concluída", "conclusion_date":"' + dataAtual + '" }'
+
+    const response = await fetch(`/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data
+    });
+    const tasks = await response.json();
+    alert('Parebéns tarefa concluída! (status alterado para concluída e data de conclusão atualizada)')
+    document.getElementById(id).remove()
+    carregarTarefas(tasks)
 }

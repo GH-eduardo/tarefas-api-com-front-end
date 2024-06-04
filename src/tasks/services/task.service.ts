@@ -13,18 +13,14 @@ class taskService {
         return findedTasks
     }
 
-    // async findByTitle(title: string) {
-    //     const findedTask = await taskModel.find({ title: title });
-    //     return findedTask
-    // }
-
     async findByTitle(title: string) {
-        const findedTask = await taskModel.find({ title: { $regex: title, $options: 'i'} });
-        return findedTask
+        const findedTasks = await taskModel.find({ title: { $regex: title, $options: 'i' } });
+        return findedTasks
     }
 
-    async findAllByUserName(userId: string) {
-        return await taskModel.find({ author: userId });
+    async findAllByUserName(author: string) {
+        const findedTasks = await taskModel.find({ author: author });
+        return findedTasks
     }
 
     async getCompletedTasks() {
@@ -35,21 +31,22 @@ class taskService {
         return taskModel.find({ status: 'pendente' });
     }
 
-    // async countTasksByUserName(userId: string) {
-    // return tasks.length;
-    // }
+    async countTasksByUserName(userName: string) {
+        const count = await taskModel.countDocuments({ author: userName });
+        return 'O usuário ' + userName + ' possui ' + count + ' tarefas registradas';
+    }
 
-    async findMostRecentTaskByUserName(userId: string) {
-        const task = await taskModel.findOne({ author: userId }).sort({ creation_date: -1 });
+    async findMostRecentTaskByUserName(userName: string) {
+        const task = await taskModel.findOne({ author: userName }).sort({ creation_date: -1 });
         return task;
     }
 
-    async findOldestTaskByUserName(userId: string) {
-        const task = await taskModel.findOne({ author: userId }).sort({ creation_date: 1 });
+    async findOldestTaskByUserName(userName: string) {
+        const task = await taskModel.findOne({ author: userName }).sort({ creation_date: 1 });
         return task;
     }
 
-    async findTasksDueInPeriod(startDate: Date, endDate: Date) {
+    async findTasksCreatedInPeriod(startDate: Date, endDate: Date) {
         const tasks = await taskModel.find({
             creation_date: {
                 $gte: startDate,
@@ -62,7 +59,7 @@ class taskService {
     async calculateAverageCompletion() {
         const tasks = await taskModel.find();
         const completedTasks = tasks.filter(task => task.status === 'concluída');
-        return ("A média geral de conclusão de tarefas é de: " + (completedTasks.length / tasks.length).toFixed(2));
+        return ("A média geral de conclusão de tarefas é de: " + (completedTasks.length / tasks.length).toFixed(2) + "%");
     }
 
     async findTaskWithLongestDescription() {

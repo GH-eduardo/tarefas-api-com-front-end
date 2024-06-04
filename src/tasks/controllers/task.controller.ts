@@ -19,14 +19,9 @@ class taskController {
         res.status(200)
         return res.json(findedTask)
     }
-    // async findByTitle(req: Request, res: Response) {
-    //     const findedTask = await taskService.findByTitle(req.params.id)
-    //     res.status(200)
-    //     return res.json(findedTask)
-    // }
 
     async findAllByUserName(req: Request, res: Response) {
-        const tasks = await taskService.findAllByUserName(req.params.id);
+        const tasks = await taskService.findAllByUserName(req.params.author);
         res.json(tasks);
     }
 
@@ -40,30 +35,30 @@ class taskController {
         res.json(tasks);
     }
 
-    // async countTasksByUserName(req: Request, res: Response) {
-    //     const userId = req.params.id;
-    //     const count = await taskService.countTasksByUserName(userId);
-    //     res.json(count);
-    // }
+    async countTasksByUserName(req: Request, res: Response) {
+        const userName = req.params.author;
+        const count = await taskService.countTasksByUserName(userName);
+        res.json(count);
+    }
 
     async findMostRecentTaskByUserName(req: Request, res: Response) {
-        const userId = req.params.id;
-        const task = await taskService.findMostRecentTaskByUserName(userId);
+        const userName = req.params.author;
+        const task = await taskService.findMostRecentTaskByUserName(userName);
         res.json(task);
     }
 
     async findOldestTaskByUserName(req: Request, res: Response) {
-        const userId = req.params.id;
-        const task = await taskService.findOldestTaskByUserName(userId);
+        const userName = req.params.author;
+        const task = await taskService.findOldestTaskByUserName(userName);
         res.json(task);
     }
 
-    async findTasksDueInPeriod(req: Request, res: Response) {
+    async findTasksCreatedInPeriod(req: Request, res: Response) {
         const startDate = req.query.startDate;
         const endDate = req.query.endDate;
 
         if (typeof startDate === 'string' && typeof endDate === 'string') {
-            const tasks = await taskService.findTasksDueInPeriod(new Date(startDate), new Date(endDate));
+            const tasks = await taskService.findTasksCreatedInPeriod(new Date(startDate), new Date(endDate));
             return res.json(tasks);
         } else {
             console.log("Invalid date format, expected: yyyy-mm-dd")
