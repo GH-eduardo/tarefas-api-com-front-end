@@ -16,7 +16,7 @@
 
     <main>
 
-        <div id="areaDePesquisa">
+        <form id="operacaoForm" onsubmit="menuOperacao(event)">
             <div id="select">
                 <label for="opcoes">Operação desejada:</label>
                 <select name="opcoes" id="opcoes">
@@ -25,7 +25,7 @@
                     <option value="3">pesquisar tarefa(s) por título</option>
                     <option value="4">listar tarefas concluídas</option>
                     <option value="5">listar tarefas pendentes</option>
-                    <option value="6">listar tarefas que foram concluídas em um determinado período</option>
+                    <option value="6">listar tarefas que foram criadas em um determinado período</option>
                     <option value="7">mostrar média de conclusão de tarefas</option>
                     <option value="8">mostrar tarefa com a descrição mais longa</option>
                     <option value="9">mostrar todas as tarefas de alguém</option>
@@ -34,12 +34,12 @@
                     <option value="12">mostrar a tarefa mais antiga de alguém</option>
                 </select>
             </div>
-            <input type="text" id="input">
-            <input type="text" id="input2">
+            <input type="text" name="input" id="input">
+            <input type="text" name="input2" id="input2">
             <div id="divDoBotão">
-                <button type="submit">OK</button>
+                <button type="submit" id="botão">OK</button>
             </div>
-        </div>
+        </form>
 
         <div class="container">
 
@@ -51,11 +51,10 @@
                 <textarea id="description" name="description" required placeholder="Informe a descrição da tarefa"></textarea>
 
                 <div id="select2">
-                    <label for="status">status da tarefa</label>
+                    <label for="status">status da tarefa:</label>
                     <select name="status" id="status">
                         <option value="pendente">pendente</option>
                         <option value="em andamento">em andamento</option>
-                        <option value="concluída">concluída</option>
                     </select>
                 </div>
 
@@ -64,10 +63,12 @@
                 <button type="submit">Salvar Tarefa</button>
             </form>
             <!-- Lista de tarefas -->
-            <ul id="taskList">
-            </ul>
 
         </div>
+
+        <ul id="taskList">
+        </ul>
+
     </main>
 
     <footer>

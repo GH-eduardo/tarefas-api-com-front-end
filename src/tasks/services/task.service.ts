@@ -13,8 +13,13 @@ class taskService {
         return findedTasks
     }
 
-    async findByTitle(id: string) {
-        const findedTask = await taskModel.findById(id)
+    // async findByTitle(title: string) {
+    //     const findedTask = await taskModel.find({ title: title });
+    //     return findedTask
+    // }
+
+    async findByTitle(title: string) {
+        const findedTask = await taskModel.find({ title: { $regex: title, $options: 'i'} });
         return findedTask
     }
 
@@ -31,7 +36,7 @@ class taskService {
     }
 
     // async countTasksByUserName(userId: string) {
-        // return tasks.length;
+    // return tasks.length;
     // }
 
     async findMostRecentTaskByUserName(userId: string) {

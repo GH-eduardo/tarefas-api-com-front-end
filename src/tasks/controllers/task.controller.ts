@@ -15,10 +15,15 @@ class taskController {
     }
 
     async findByTitle(req: Request, res: Response) {
-        const findedTask = await taskService.findByTitle(req.params.id)
+        const findedTask = await taskService.findByTitle(req.params.title)
         res.status(200)
         return res.json(findedTask)
     }
+    // async findByTitle(req: Request, res: Response) {
+    //     const findedTask = await taskService.findByTitle(req.params.id)
+    //     res.status(200)
+    //     return res.json(findedTask)
+    // }
 
     async findAllByUserName(req: Request, res: Response) {
         const tasks = await taskService.findAllByUserName(req.params.id);

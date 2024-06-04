@@ -43,7 +43,7 @@ main {
   gap: 20px;
 }
 
-#areaDePesquisa {
+#operacaoForm {
   font-size: 1.2em;
   font-weight: bold;
   display: flex;
@@ -65,9 +65,10 @@ main {
   font-size: 1.5em;
 }
 
-#select2 select {
+#status {
   font-size: 1em;
   text-align: center;
+  width: 310px;
 }
 
 #opcoes {
@@ -81,22 +82,24 @@ main {
 }
 
 #divDoBotão {
-  display: flex;
-  justify-content: center;
   width: 800px;
+  display: none;
 }
 
-main form {
+#botão {
+  justify-self: center;
+}
+
+#taskForm {
   display: flex;
   flex-direction: column;
   gap: 15px;
   align-items: center;
-  width: 55ch;
-  margin: 0 auto;
 }
 
 #taskList {
   display: none;
+  width: 600px;
 }
 
 input,
@@ -107,7 +110,7 @@ textarea {
 }
 
 button {
-  border-radius: 5px;
+  border-radius: 16px;
   background-color: #0074d9;
   color: #fff;
   border: none;
@@ -117,11 +120,44 @@ button {
 
 .editButton {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 55px;
+  top: 10px;
   border-radius: 5px;
   background-color: #676767;
   padding: 3px;
+  width: 35px;
+  height: 35px;
+  border: solid 1px #ccc;
+}
+
+.removeButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border-radius: 5px;
+  background-color: #676767;
+  padding: 3px;
+  width: 35px;
+  height: 35px;
+  border: solid 1px #ccc;
+}
+
+.removeButton img {
+  width: 25px;
+  height: 25px;
+}
+
+.completeButton {
+  font-size: 2.5em;
+  position: absolute;
+  right: 14px;
+  top: 70px;
+  border-radius: 50%;
+  background-color: #00d26a;
+  padding: 3px;
+  width: 70px;
+  height: 70px;
+  border: solid 1px #ccc;
 }
 
 ul {
