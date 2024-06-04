@@ -141,6 +141,7 @@ function addTask(event) {
         .catch((error) => console.error('Error:', error));
 
     form.reset()
+    alert('Tarefa adicionada com sucesso')
 }
 
 async function carregarTodasTarefas() {
