@@ -59,7 +59,7 @@ class taskService {
     async calculateAverageCompletion() {
         const tasks = await taskModel.find();
         const completedTasks = tasks.filter(task => task.status === 'concluída');
-        return ("A média geral de conclusão de tarefas é de: " + (completedTasks.length / tasks.length).toFixed(2) + "%");
+        return ("A média geral de conclusão de tarefas é de: " + Math.round((completedTasks.length / tasks.length) * 100) + "%");
     }
 
     async findTaskWithLongestDescription() {
