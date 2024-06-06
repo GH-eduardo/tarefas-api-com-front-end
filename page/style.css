@@ -149,15 +149,15 @@ button {
 }
 
 .completeButton {
-  font-size: 2.5em;
+  font-size: 1.2em;
   position: absolute;
-  right: 14px;
-  top: 75px;
+  right: 100px;
+  top: 10px;
   border-radius: 5px;
   background-color: #00d26a;
   padding: 3px;
-  width: 70px;
-  height: 70px;
+  width: 35px;
+  height: 35px;
   border: solid 1px #ccc;
 }
 
@@ -173,6 +173,10 @@ li {
   margin: 8px 0;
   padding: 20px;
   border: solid 1px #ccc;
+}
+
+h2 {
+  max-width: 440px;
 }
 
 li p {
@@ -212,13 +216,11 @@ footer {
 
   #opcoes {
     width: 275px;
-    overflow-x: scroll;
   }
 
   #opcoes option {
     font-size: 1em;
     width: 275px;
-    overflow-x: scroll;
   }
 
   #divDoBotão {
@@ -256,14 +258,11 @@ footer {
   .completeButton {
     right: 10px;
     top: 94px;
-    font-size: 1.2em;
-    width: 35px;
-    height: 35px;
   }
 
   li {
     padding: 10px 8px;
-  }	
+  }
 
   h2, p {
     max-width: 220px;
