@@ -1,7 +1,7 @@
 # API To-Do List com interface web feita em typescript com node.js, express e MongoDB
 
 ## Pré-requisitos:
-- Ter o `Node.js` e o Banco de dados `MongoDB` instalados você pode baixa-los através de seus sites oficiais aqui e aqui respectivamente
+- Ter o `Node.js` e o Banco de dados `MongoDB` instalados você pode baixa-los através de seus sites oficiais [aqui](https://nodejs.org/en/download/package-manager) e [aqui](https://www.mongodb.com/try/download/shell) respectivamente
 
 ## Para inicializar:
 - execute no terminal (estando no diretório raíz do repositório): ```npm install``` para instalar as dependências necessárias e após isso ```npm run start``` para inicializar o servidor, ao realizar esse comando deverá ser impresso no terminal a mensagem: "Servidor rodando em ```http://localhost:3000```"
